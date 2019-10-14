@@ -3,11 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "truffle-config.js",
-  "directories": {
-    "test": "./node_modules/.bin/mocha"
-  },
   "scripts": {
     "compile:contract": "truffle compile",
+    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "test": "mocha"
   },
   "repository": {
@@ -26,5 +24,14 @@
     "ganache-cli": "^6.7.0",
     "mocha": "^6.2.1",
     "web3": "^1.2.1"
+  },
+  "devDependencies": {
+    "husky": "^3.0.9",
+    "prettier": "^1.18.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run format"
+    }
   }
 }
