@@ -34,9 +34,6 @@ bower_components
 # node-waf configuration
 .lock-wscript
 
-# Contract build directory
-build/
-
 # Dependency directories
 node_modules/
 jspm_packages/
@@ -74,3 +71,12 @@ jspm_packages/
 
 # next.js build output
 .next
+
+# production
+/build
+
+# misc
+.DS_Store
+.env*
+
+address.json
