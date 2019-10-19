@@ -1,8 +1,6 @@
 import React from "react";
 import App from "next/app";
 
-import CustomLayout from "../components/CustomLayout";
-
 class MyApp extends App {
   // Only uncomment this method if you have blocking data requirements for
   // every single page in your application. This disables the ability to
@@ -19,11 +17,7 @@ class MyApp extends App {
   render() {
     const { Component, pageProps } = this.props;
 
-    return (
-      <CustomLayout>
-        <Component {...pageProps} />
-      </CustomLayout>
-    );
+    return <Component {...pageProps} />;
   }
 }
 

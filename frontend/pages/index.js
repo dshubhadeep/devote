@@ -1,40 +1,24 @@
 import React from "react";
-import Head from "next/head";
+import Link from "next/link";
+import { Row, Col, Button } from "antd";
 
-import { address } from "../build/contracts/address.json";
+import CustomLayout from "../components/CustomLayout";
 
 const Home = () => (
-  <div>
-    <Head>
-      <title>Home</title>
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
-
-    <div className="hero">
-      <h1 className="title">Welcome to Next.js!</h1>
-      <p className="description">
-        Contract deployed at <strong>{address}</strong>
-      </p>
-    </div>
-
-    <style jsx>{`
-      .hero {
-        width: 100%;
-        color: #333;
-      }
-      .title {
-        margin: 0;
-        width: 100%;
-        padding-top: 80px;
-        line-height: 1.15;
-        font-size: 48px;
-      }
-      .title,
-      .description {
-        text-align: center;
-      }
-    `}</style>
-  </div>
+  <CustomLayout>
+    <Row>
+      <Col span={4} offset={2}>
+        <h1 style={{ fontWeight: "bold" }}>Campaigns</h1>
+      </Col>
+      <Col span={4} offset={14}>
+        <Link href="/campaigns/new">
+          <Button icon="plus" style={{ fontSize: "16px" }} size="large">
+            Create
+          </Button>
+        </Link>
+      </Col>
+    </Row>
+  </CustomLayout>
 );
 
 export default Home;

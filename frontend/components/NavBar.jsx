@@ -12,8 +12,7 @@ const NavBar = () => {
         <Menu
           theme="dark"
           mode="horizontal"
-          style={{ lineHeight: "64px", float: "right" }}
-        >
+          style={{ lineHeight: "64px", float: "right" }}>
           <Menu.Item key="1">
             <Link href="/">
               <a>Campaigns</a>

@@ -4,14 +4,16 @@ import "antd/dist/antd.css";
 
 import NavBar from "./NavBar";
 
-const CustomLayout = ({ children, navbar = true }) => {
+const CustomLayout = ({ children, navbar = true, title = "Home" }) => {
   return (
     <>
       <Head>
+        <title>{title}</title>
         <link
           href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
           rel="stylesheet"
         />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       {navbar && <NavBar />}
       <div style={{ marginTop: "36px" }}>{children}</div>
