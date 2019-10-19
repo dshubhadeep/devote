@@ -19,7 +19,6 @@ const Home = () => (
 
     <style jsx>{`
       .hero {
-        font-family: "Inter Medium", sans-serif;
         width: 100%;
         color: #333;
       }

@@ -3,8 +3,8 @@ const ganache = require("ganache-cli");
 const Web3 = require("web3");
 
 // Contracts
-const VotingFactory = require("../frontend/contracts/VotingFactory.json");
-const Voting = require("../frontend/contracts/Voting.json");
+const VotingFactory = require("../frontend/build/contracts/VotingFactory.json");
+const Voting = require("../frontend/build/contracts/Voting.json");
 
 const web3 = new Web3(
   ganache.provider({
