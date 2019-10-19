@@ -10,7 +10,7 @@ module.exports = async deployer => {
   const factory = await VotingFactory.deployed();
 
   fs.writeFileSync(
-    "./frontend/utils/address.json",
+    "./frontend/build/contracts/address.json",
     JSON.stringify({ address: factory.address })
   );
 

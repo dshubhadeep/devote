@@ -74,6 +74,7 @@ jspm_packages/
 
 # production
 /build
+/frontend/build
 
 # misc
 .DS_Store

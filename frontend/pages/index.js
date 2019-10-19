@@ -1,7 +1,7 @@
 import React from "react";
 import Head from "next/head";
 
-import { address } from "../utils/address.json";
+import { address } from "../build/contracts/address.json";
 
 const Home = () => (
   <div>
