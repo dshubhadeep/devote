@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Row, Col, Button } from "antd";
 
 import CustomLayout from "../components/CustomLayout";
+import CampaignList from "../components/CampaignList";
 
 const Home = () => (
   <CustomLayout>
@@ -16,6 +17,11 @@ const Home = () => (
             Create
           </Button>
         </Link>
+      </Col>
+    </Row>
+    <Row>
+      <Col span={20} offset={2}>
+        <CampaignList />
       </Col>
     </Row>
   </CustomLayout>
