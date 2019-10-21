@@ -1,21 +1,7 @@
+import React, { useEffect, useState } from "react";
 import { Table } from "antd";
 
-const data = [
-  {
-    key: "1",
-    name: "BJP",
-    members: 32,
-    status: "Approved",
-    docLink: "ipfsHash"
-  },
-  {
-    key: "2",
-    name: "Congress",
-    members: 42,
-    status: "Rejected",
-    docLink: "ipfsHash"
-  }
-];
+import generateCampaignInstance from "../../utils/campaign";
 
 const columns = [
   {
@@ -37,16 +23,76 @@ const columns = [
     title: "Document link",
     dataIndex: "docLink",
     key: "docLink"
+  },
+  {
+    title: "Vote Count",
+    dataIndex: "noOfVotes",
+    key: "noOfVotes"
   }
 ];
 
-const CandidateList = ({ candidateCount }) => {
+const getCandidateData = async (candidateCount, address) => {
+  const campaign = generateCampaignInstance(address);
+
+  const entryStages = ["Reject", "Not Decided", "Accept"];
+
+  const candidates = await Promise.all(
+    Array(candidateCount)
+      .fill(undefined)
+      .map(async (el, index) => {
+        const {
+          name,
+          members,
+          ipfsHash,
+          stage,
+          noOfVotes
+        } = await campaign.methods.candidates(index + 1).call();
+
+        return {
+          name,
+          members,
+          noOfVotes,
+          key: index,
+          status: entryStages[stage],
+          docLink: ipfsHash
+        };
+      })
+  );
+
+  return candidates;
+};
+
+const CandidateList = ({ candidateCount, address }) => {
+  const [candidates, setCandidates] = useState([]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const getCandidates = async () => {
+      const campaignData = await getCandidateData(candidateCount, address);
+
+      if (isMounted) {
+        setCandidates(campaignData);
+      }
+    };
+
+    getCandidates();
+
+    return () => {
+      /**
+       * Cleanup
+       * @see https://github.com/facebook/react/issues/14369
+       */
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <div style={{ marginTop: "18px", marginBottom: "32px" }}>
       {candidateCount > 0 ? (
         <Table
           columns={columns}
-          dataSource={data}
+          dataSource={candidates}
           pagination={false}
           bordered={true}
         />

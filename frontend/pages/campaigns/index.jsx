@@ -1,3 +1,4 @@
+import React from "react";
 import { Col, Row, Button, Badge, message } from "antd";
 import Router from "next/router";
 
@@ -9,7 +10,7 @@ import CustomLayout from "../../components/CustomLayout";
 import generateCampaignInstance from "../../utils/campaign";
 import web3 from "../../utils/web3";
 
-const Campaign = ({ summary, campaign }) => {
+const Campaign = ({ summary, campaign, address }) => {
   const closeCampaign = async () => {
     try {
       const accounts = await web3.eth.getAccounts();
@@ -57,7 +58,10 @@ const Campaign = ({ summary, campaign }) => {
       <Row>
         <Col offset={2} span={15}>
           <h2 className="header">Candidates</h2>
-          <CandidateList candidateCount={Number(summary.candidateCount)} />
+          <CandidateList
+            candidateCount={Number(summary.candidateCount)}
+            address={address}
+          />
         </Col>
       </Row>
       <Row>
@@ -83,8 +87,6 @@ Campaign.getInitialProps = async ({ query }) => {
   const address = typeof id === "string" ? id : id[0];
   const campaign = generateCampaignInstance(address);
   const summary = await campaign.methods.getSummary().call();
-
-  console.log("SUMMARY", summary);
 
   return { address, summary, campaign };
 };
