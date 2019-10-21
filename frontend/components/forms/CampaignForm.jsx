@@ -21,7 +21,7 @@ const CampaignForm = props => {
       } else {
         setLoading(true);
 
-        const accounts = await web3.eth.getAccounts();
+        console.log("SELECTED", window.ethereum.selectedAddress);
 
         try {
           await factory.methods
@@ -30,7 +30,7 @@ const CampaignForm = props => {
               val.campaign_name
             )
             .send({
-              from: accounts[0],
+              from: window.ethereum.selectedAddress,
               gas: "2000000"
             });
 
@@ -41,6 +41,7 @@ const CampaignForm = props => {
             Router.push("/");
           }, 2000);
         } catch (err) {
+          console.log(err.message);
           message.error(err.message, 3);
         }
 

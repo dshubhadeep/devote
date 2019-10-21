@@ -19,6 +19,12 @@ contract VotingFactory {
         electionCommission = msg.sender;
     }
 
+    /**********************
+    *   EVENTS
+    ***********************/
+
+    event CampaignCreated(uint _memberFee, string _name);
+
     modifier onlyEC {
         require(msg.sender == electionCommission, "Only EC is allowed to perform this action");
         _;
@@ -35,6 +41,8 @@ contract VotingFactory {
             campaignAddr: address(new Voting(_memberFee, msg.sender, _name)),
             name: _name
         });
+
+        emit CampaignCreated(_memberFee, _name);
 
         return true;
     }

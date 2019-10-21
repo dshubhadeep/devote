@@ -1,0 +1,92 @@
+import { Col, Row, Button, Badge, message } from "antd";
+import Router from "next/router";
+
+import CampaignActions from "../../components/CampaignActions";
+import CampaignDetail from "../../components/CampaignDetail";
+import CandidateList from "../../components/CandidateList";
+import CustomLayout from "../../components/CustomLayout";
+
+import generateCampaignInstance from "../../utils/campaign";
+import web3 from "../../utils/web3";
+
+const Campaign = ({ summary, campaign }) => {
+  const closeCampaign = async () => {
+    try {
+      const accounts = await web3.eth.getAccounts();
+
+      if (summary.status) {
+        message.info("Campaign is already closed");
+      } else {
+        await campaign.methods.closeCampaign().send({
+          from: accounts[0]
+        });
+
+        message.success("Closed campaign", 2);
+
+        setTimeout(() => {
+          Router.push("/");
+        }, 2500);
+      }
+    } catch (err) {
+      message.error(err.message);
+    }
+  };
+
+  return (
+    <CustomLayout>
+      <Row>
+        <Col span={4} offset={2}>
+          <h1 className="header">{summary.name}</h1>
+        </Col>
+        <Col span={4} offset={14}>
+          <Button style={{ background: "#1A202C" }} size="large" disabled>
+            <Badge
+              status="processing"
+              text={summary.status ? "Completed" : "Ongoing"}
+              style={{ color: "white" }}
+              color={summary.status ? "green" : ""}
+            />
+          </Button>
+        </Col>
+      </Row>
+      <Row>
+        <Col offset={2} span={20}>
+          <CampaignDetail summary={summary} />
+        </Col>
+      </Row>
+      <Row>
+        <Col offset={2} span={15}>
+          <h2 className="header">Candidates</h2>
+          <CandidateList candidateCount={Number(summary.candidateCount)} />
+        </Col>
+      </Row>
+      <Row>
+        <Col offset={2} span={11}>
+          <h2 className="header">Actions</h2>
+          <CampaignActions handleClick={closeCampaign} />
+        </Col>
+      </Row>
+
+      <style jsx>{`
+        .header {
+          font-weight: bold;
+          color: #2d3748;
+        }
+      `}</style>
+    </CustomLayout>
+  );
+};
+
+Campaign.getInitialProps = async ({ query }) => {
+  const { id } = query;
+
+  const address = typeof id === "string" ? id : id[0];
+  const campaign = generateCampaignInstance(address);
+  const summary = await campaign.methods.getSummary().call();
+
+  console.log("SUMMARY", summary);
+
+  return { address, summary, campaign };
+};
+
+export default Campaign;
