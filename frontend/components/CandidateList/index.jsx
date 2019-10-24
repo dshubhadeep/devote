@@ -54,7 +54,14 @@ const getCandidateData = async (candidateCount, address) => {
           noOfVotes,
           key: index,
           status: entryStages[stage],
-          docLink: ipfsHash
+          docLink: (
+            <a
+              href={`https://ipfs.infura.io/ipfs/${ipfsHash}`}
+              rel="noopener noreferrer"
+              target="_blank">
+              View docs
+            </a>
+          )
         };
       })
   );

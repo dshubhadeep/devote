@@ -6,7 +6,7 @@ import CampaignForm from "../../components/forms/CampaignForm";
 
 const NewCampaignPage = () => {
   return (
-    <CustomLayout>
+    <CustomLayout title="New Campaign">
       <Row>
         <Col span={7} offset={2}>
           <h1 style={{ fontWeight: "bold", marginBottom: "20px" }}>

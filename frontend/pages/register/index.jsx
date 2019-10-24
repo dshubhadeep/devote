@@ -8,7 +8,7 @@ import generateCampaignInstance from "../../utils/campaign";
 
 const CampaignRegister = ({ address, summary }) => {
   return (
-    <CustomLayout navbar={false}>
+    <CustomLayout navbar={false} title="Register">
       <div style={{ textAlign: "center", marginBottom: "36px" }}>
         <h1 className="header">{summary.name}</h1>
         <h2>Registration Form</h2>

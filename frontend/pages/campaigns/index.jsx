@@ -34,7 +34,7 @@ const Campaign = ({ summary, campaign, address }) => {
   };
 
   return (
-    <CustomLayout>
+    <CustomLayout title={summary.name}>
       <Row>
         <Col span={4} offset={2}>
           <h1 className="header">{summary.name}</h1>

@@ -1,14 +1,26 @@
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, Upload, message, Icon } from "antd";
+import { useState } from "react";
 
 import web3 from "../../utils/web3";
+import ipfs from "../../utils/ipfs";
 import generateCampaignInstance from "../../utils/campaign";
 
 const EntryForm = ({ address, form, memberFee }) => {
   const { getFieldDecorator } = form;
+  const [loading, setLoading] = useState(false);
+
+  const normFile = e => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
+  };
 
   // Submit handler
   const handleSubmit = async event => {
     event.preventDefault();
+    setLoading(true);
+
     form.validateFields(async (err, val) => {
       if (err) {
         message.error("Fill all the fields");
@@ -17,11 +29,23 @@ const EntryForm = ({ address, form, memberFee }) => {
 
         const regFee =
           Number(web3.utils.fromWei(memberFee, "micro")) * val.member_cnt;
-        console.log(campaign, regFee, window.ethereum.selectedAddress);
+
+        // TODO Support for multiple files
+        const formattedFiles = val.dragger.map(file => file["originFileObj"]);
 
         try {
+          message.loading("Uploading documents", 2);
+          const res = await ipfs.add(formattedFiles[0]);
+          message.info("Uploaded documents", 2);
+
+          console.log(res[0]);
+
           await campaign.methods
-            .submitEntry(val.candidate_name, Number(val.member_cnt), "hash")
+            .submitEntry(
+              val.candidate_name,
+              Number(val.member_cnt),
+              res[0].hash
+            )
             .send({
               from: window.ethereum.selectedAddress,
               value: web3.utils.toWei(regFee.toString(), "micro"),
@@ -34,6 +58,8 @@ const EntryForm = ({ address, form, memberFee }) => {
         }
       }
     });
+
+    setLoading(false);
   };
 
   const handleMemberCountChange = e => {
@@ -91,8 +117,30 @@ const EntryForm = ({ address, form, memberFee }) => {
             />
           )}
         </Form.Item>
+        <Form.Item label="Dragger">
+          {getFieldDecorator("dragger", {
+            valuePropName: "fileList",
+            getValueFromEvent: normFile
+          })(
+            <Upload.Dragger name="files" multiple>
+              <p className="ant-upload-drag-icon">
+                <Icon type="inbox" />
+              </p>
+              <p className="ant-upload-text">
+                Click or drag file to this area to upload
+              </p>
+              <p className="ant-upload-hint">
+                Support for a single or bulk upload.
+              </p>
+            </Upload.Dragger>
+          )}
+        </Form.Item>
         <Form.Item wrapperCol={{ span: 12, offset: 10 }}>
-          <Button type="primary" htmlType="submit" size="large">
+          <Button
+            type="primary"
+            htmlType="submit"
+            size="large"
+            loading={loading}>
             Register
           </Button>
         </Form.Item>
