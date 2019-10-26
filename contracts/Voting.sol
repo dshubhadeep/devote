@@ -78,8 +78,17 @@ contract Voting {
      */
     function approveEntry(uint _candidateId) public onlyEC onlyOngoingCampaign returns (bool entryStatus) {
         assert(_candidateId > 0 && _candidateId <= noOfCandidates);
+
+        Candidate memory candidate = candidates[_candidateId];
+
+        if (candidate.stage == EntryStage.NOT_DECIDED) {
+            acceptedCandidateCount++;
+        } else if (candidate.stage == EntryStage.REJECT) {
+            acceptedCandidateCount++;
+            rejectedCandidateCount--;
+        }
+
         candidates[_candidateId].stage = EntryStage.ACCEPT;
-        acceptedCandidateCount++;
 
         return true;
     }
@@ -90,8 +99,17 @@ contract Voting {
      */
     function rejectEntry(uint _candidateId) public onlyEC onlyOngoingCampaign returns (bool rejectStatus) {
         assert(_candidateId > 0 && _candidateId <= noOfCandidates);
+
+        Candidate memory candidate = candidates[_candidateId];
+
+        if (candidate.stage == EntryStage.NOT_DECIDED) {
+            rejectedCandidateCount++;
+        } else if (candidate.stage == EntryStage.ACCEPT) {
+            rejectedCandidateCount++;
+            acceptedCandidateCount--;
+        }
+
         candidates[_candidateId].stage = EntryStage.REJECT;
-        rejectedCandidateCount++;
 
         return true;
     }

@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Table } from "antd";
+import { Button, Table, message } from "antd";
 
 import generateCampaignInstance from "../../utils/campaign";
+let campaign;
 
 const columns = [
+  {
+    title: "Sr. No.",
+    dataIndex: "sno",
+    key: "sno"
+  },
   {
     title: "Candidate Name",
     dataIndex: "name",
@@ -28,13 +34,40 @@ const columns = [
     title: "Vote Count",
     dataIndex: "noOfVotes",
     key: "noOfVotes"
+  },
+  {
+    title: "Actions",
+    dataIndex: "actions",
+    key: "actions"
   }
 ];
 
-const getCandidateData = async (candidateCount, address) => {
-  const campaign = generateCampaignInstance(address);
+const handleApproveEntry = async index => {
+  try {
+    await campaign.methods.approveEntry(index + 1).send({
+      from: window.ethereum.selectedAddress
+    });
 
-  const entryStages = ["Reject", "Not Decided", "Accept"];
+    message.success(`Approved candidate ${index + 1}`);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const handleRejectEntry = async index => {
+  try {
+    await campaign.methods.rejectEntry(index + 1).send({
+      from: window.ethereum.selectedAddress
+    });
+
+    message.success(`Rejected candidate ${index + 1}`);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const getCandidateData = async (candidateCount, address) => {
+  const entryStages = ["Rejected", "Not Decided", "Accepted"];
 
   const candidates = await Promise.all(
     Array(candidateCount)
@@ -53,6 +86,7 @@ const getCandidateData = async (candidateCount, address) => {
           members,
           noOfVotes,
           key: index,
+          sno: index + 1,
           status: entryStages[stage],
           docLink: (
             <a
@@ -61,6 +95,21 @@ const getCandidateData = async (candidateCount, address) => {
               target="_blank">
               View docs
             </a>
+          ),
+          actions: (
+            <Button.Group>
+              <Button
+                onClick={() => handleApproveEntry(index)}
+                disabled={stage == 2}>
+                Approve
+              </Button>
+              <Button
+                type="danger"
+                onClick={() => handleRejectEntry(index)}
+                disabled={stage == 0}>
+                Reject
+              </Button>
+            </Button.Group>
           )
         };
       })
@@ -71,6 +120,7 @@ const getCandidateData = async (candidateCount, address) => {
 
 const CandidateList = ({ candidateCount, address }) => {
   const [candidates, setCandidates] = useState([]);
+  campaign = generateCampaignInstance(address);
 
   useEffect(() => {
     let isMounted = true;

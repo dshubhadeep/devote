@@ -6,7 +6,8 @@
   "scripts": {
     "compile:contract": "truffle compile",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
-    "test": "mocha"
+    "test": "mocha",
+    "dev": "cd ./frontend && npm run dev"
   },
   "repository": {
     "type": "git",
