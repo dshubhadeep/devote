@@ -52,7 +52,7 @@ const Campaign = ({ summary, campaign, address }) => {
       </Row>
       <Row>
         <Col offset={2} span={20}>
-          <CampaignDetail summary={summary} />
+          <CampaignDetail {...summary} />
         </Col>
       </Row>
       <Row>

@@ -2,33 +2,33 @@ import { Card, Statistic } from "antd";
 
 import web3 from "../utils/web3";
 
-const CampaignDetail = ({ summary }) => {
+const CampaignDetail = ({
+  fee,
+  candidateCount,
+  noOfAcceptedCandidates,
+  noOfRejectedCandidates,
+  voterCount
+}) => {
   return (
     <div className="stats-grid">
       <Card hoverable>
         <Statistic
           title="Member fee"
-          value={web3.utils.fromWei(summary.fee, "micro")}
+          value={web3.utils.fromWei(fee, "micro")}
           suffix="microether"
         />
       </Card>
       <Card hoverable>
-        <Statistic title="Candidates" value={summary.candidateCount} />
+        <Statistic title="Candidates" value={candidateCount} />
       </Card>
       <Card hoverable>
-        <Statistic
-          title="Accepted candidates"
-          value={summary.noOfAcceptedCandidates}
-        />
+        <Statistic title="Accepted candidates" value={noOfAcceptedCandidates} />
       </Card>
       <Card hoverable>
-        <Statistic
-          title="Rejected candidates"
-          value={summary.noOfRejectedCandidates}
-        />
+        <Statistic title="Rejected candidates" value={noOfRejectedCandidates} />
       </Card>
       <Card hoverable>
-        <Statistic title="Voters" value={summary.voterCount} />
+        <Statistic title="Voters" value={voterCount} />
       </Card>
 
       <style jsx>{`

@@ -1,8 +1,8 @@
 import { Button, Row, Col, Divider, message } from "antd";
 
-const copyLink = () => {
+const copyLink = action => {
   // https://{sitename}.com/register?id={campaign_address}
-  const link = `${location.origin}/register${location.search}`;
+  const link = `${location.origin}/${action}${location.search}`;
 
   navigator.clipboard.writeText(link);
   message.success("Copied link", 1.5);
@@ -24,7 +24,26 @@ const CampaignActions = ({ handleClick }) => {
               <Button
                 style={{ marginTop: "10px" }}
                 icon="copy"
-                onClick={copyLink}>
+                onClick={() => copyLink("register")}>
+                Copy link
+              </Button>
+            </div>
+          </Col>
+        </Row>
+        <Divider style={{ margin: "12px 0", background: "#CBD5E0" }} />
+        <Row>
+          <Col span={18}>
+            <h3 className="action-header">Voting link</h3>
+            <h4 className="action-text">
+              Link to be used by voters to vote for candidates
+            </h4>
+          </Col>
+          <Col span={6}>
+            <div className="btn-container">
+              <Button
+                style={{ marginTop: "10px" }}
+                icon="copy"
+                onClick={() => copyLink("vote")}>
                 Copy link
               </Button>
             </div>
