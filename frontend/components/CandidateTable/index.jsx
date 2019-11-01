@@ -23,7 +23,22 @@ const columns = [
   {
     title: "Entry status",
     dataIndex: "status",
-    key: "status"
+    key: "status",
+    filters: [
+      {
+        text: "Accepted",
+        value: "Accepted"
+      },
+      {
+        text: "Rejected",
+        value: "Rejected"
+      },
+      {
+        text: "Not Decided",
+        value: "Not Decided"
+      }
+    ],
+    onFilter: (value, record) => record.status == value
   },
   {
     title: "Document link",
@@ -33,7 +48,9 @@ const columns = [
   {
     title: "Vote Count",
     dataIndex: "noOfVotes",
-    key: "noOfVotes"
+    key: "noOfVotes",
+    sorter: (a, b) => a.noOfVotes - b.noOfVotes,
+    sortDirections: ["descend", "ascend"]
   },
   {
     title: "Actions",
@@ -66,7 +83,7 @@ const handleRejectEntry = async index => {
   }
 };
 
-const getCandidateData = async (candidateCount, address) => {
+const getCandidateData = async candidateCount => {
   const entryStages = ["Rejected", "Not Decided", "Accepted"];
 
   const candidates = await Promise.all(
@@ -118,7 +135,7 @@ const getCandidateData = async (candidateCount, address) => {
   return candidates;
 };
 
-const CandidateList = ({ candidateCount, address }) => {
+const CandidateTable = ({ candidateCount, address }) => {
   const [candidates, setCandidates] = useState([]);
   campaign = generateCampaignInstance(address);
 
@@ -126,7 +143,7 @@ const CandidateList = ({ candidateCount, address }) => {
     let isMounted = true;
 
     const getCandidates = async () => {
-      const campaignData = await getCandidateData(candidateCount, address);
+      const campaignData = await getCandidateData(candidateCount);
 
       if (isMounted) {
         setCandidates(campaignData);
@@ -136,13 +153,9 @@ const CandidateList = ({ candidateCount, address }) => {
     getCandidates();
 
     return () => {
-      /**
-       * Cleanup
-       * @see https://github.com/facebook/react/issues/14369
-       */
       isMounted = false;
     };
-  }, []);
+  }, [candidateCount]);
 
   return (
     <div style={{ marginTop: "18px", marginBottom: "32px" }}>
@@ -160,4 +173,4 @@ const CandidateList = ({ candidateCount, address }) => {
   );
 };
 
-export default CandidateList;
+export default CandidateTable;

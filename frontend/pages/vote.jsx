@@ -6,18 +6,31 @@ import CustomLayout from "../components/CustomLayout";
 
 import generateCampaignInstance from "../utils/campaign";
 
-const VotePage = ({ address }) => {
+// TODO Show that election is closed
+const VotePage = ({ address, summary }) => {
   return (
     <CustomLayout title="Voting form" navbar={false}>
       <div style={{ textAlign: "center", marginBottom: "36px" }}>
-        <h2>Vote </h2>
+        <h1 className="header">{summary.name}</h1>
+        <h2>Voting Form</h2>
       </div>
 
       <Row>
         <Col span={12} offset={6}>
-          <VoterForm />
+          <VoterForm
+            address={address}
+            candidateCount={Number(summary.candidateCount)}
+          />
         </Col>
       </Row>
+
+      <style jsx>{`
+        .header {
+          font-weight: bold;
+          color: #2d3748;
+          text-align: center;
+        }
+      `}</style>
 
       <style jsx>{`
         .header {
@@ -37,7 +50,7 @@ VotePage.getInitialProps = async ({ query }) => {
   const campaign = generateCampaignInstance(address);
   const summary = await campaign.methods.getSummary().call();
 
-  return { address, summary, campaign };
+  return { address, summary };
 };
 
 export default VotePage;

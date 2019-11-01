@@ -6,6 +6,7 @@ import EntryForm from "../../components/forms/EntryForm";
 
 import generateCampaignInstance from "../../utils/campaign";
 
+// TODO Show that election is closed
 const CampaignRegister = ({ address, summary }) => {
   return (
     <CustomLayout navbar={false} title="Register">

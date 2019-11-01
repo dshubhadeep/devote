@@ -4,22 +4,19 @@ import Router from "next/router";
 
 import CampaignActions from "../../components/CampaignActions";
 import CampaignDetail from "../../components/CampaignDetail";
-import CandidateList from "../../components/CandidateList";
+import CandidateTable from "../../components/CandidateTable";
 import CustomLayout from "../../components/CustomLayout";
 
 import generateCampaignInstance from "../../utils/campaign";
-import web3 from "../../utils/web3";
 
 const Campaign = ({ summary, campaign, address }) => {
   const closeCampaign = async () => {
     try {
-      const accounts = await web3.eth.getAccounts();
-
       if (summary.status) {
         message.info("Campaign is already closed");
       } else {
         await campaign.methods.closeCampaign().send({
-          from: accounts[0]
+          from: window.ethereum.selectedAddress
         });
 
         message.success("Closed campaign", 2);
@@ -58,7 +55,7 @@ const Campaign = ({ summary, campaign, address }) => {
       <Row>
         <Col offset={2} span={15}>
           <h2 className="header">Candidates</h2>
-          <CandidateList
+          <CandidateTable
             candidateCount={Number(summary.candidateCount)}
             address={address}
           />
