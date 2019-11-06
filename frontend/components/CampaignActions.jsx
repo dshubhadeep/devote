@@ -8,7 +8,7 @@ const copyLink = action => {
   message.success("Copied link", 1.5);
 };
 
-const CampaignActions = ({ handleClick }) => {
+const CampaignActions = ({ handleClick, getWinner }) => {
   return (
     <>
       <div className="actions-container">
@@ -45,6 +45,20 @@ const CampaignActions = ({ handleClick }) => {
                 icon="copy"
                 onClick={() => copyLink("vote")}>
                 Copy link
+              </Button>
+            </div>
+          </Col>
+        </Row>
+        <Divider style={{ margin: "12px 0", background: "#CBD5E0" }} />
+        <Row>
+          <Col span={18}>
+            <h3 className="action-header">Declare winner</h3>
+            <h4 className="action-text">Get winner</h4>
+          </Col>
+          <Col span={6}>
+            <div className="btn-container">
+              <Button style={{ marginTop: "10px" }} onClick={() => getWinner()}>
+                Declare
               </Button>
             </div>
           </Col>

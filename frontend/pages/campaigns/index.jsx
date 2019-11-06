@@ -9,7 +9,9 @@ import CustomLayout from "../../components/CustomLayout";
 
 import generateCampaignInstance from "../../utils/campaign";
 
-const Campaign = ({ summary, campaign, address }) => {
+const Campaign = ({ summary, address }) => {
+  const campaign = generateCampaignInstance(address);
+
   const closeCampaign = async () => {
     try {
       if (summary.status) {
@@ -28,6 +30,15 @@ const Campaign = ({ summary, campaign, address }) => {
     } catch (err) {
       message.error(err.message);
     }
+  };
+
+  const getWinner = async () => {
+    const winnerId = await campaign.methods.getWinner().call();
+    const { name } = await campaign.methods.candidates(winnerId).call();
+
+    console.log(campaign);
+
+    message.info(`${name} is the winner`, 10);
   };
 
   return (
@@ -64,7 +75,7 @@ const Campaign = ({ summary, campaign, address }) => {
       <Row>
         <Col offset={2} span={11}>
           <h2 className="header">Actions</h2>
-          <CampaignActions handleClick={closeCampaign} />
+          <CampaignActions handleClick={closeCampaign} getWinner={getWinner} />
         </Col>
       </Row>
 
@@ -84,6 +95,8 @@ Campaign.getInitialProps = async ({ query }) => {
   const address = typeof id === "string" ? id : id[0];
   const campaign = generateCampaignInstance(address);
   const summary = await campaign.methods.getSummary().call();
+
+  console.log(campaign.methods);
 
   return { address, summary, campaign };
 };

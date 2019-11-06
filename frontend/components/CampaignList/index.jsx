@@ -41,6 +41,8 @@ const CampaignList = () => {
       const noOfCampaigns = await factory.methods.noOfCampaigns().call();
       const campaignData = await getCampaignData(Number(noOfCampaigns));
 
+      console.log("campaigns", noOfCampaigns);
+
       if (isMounted) {
         setCampaignCount(noOfCampaigns);
         setCampaigns(campaignData);
